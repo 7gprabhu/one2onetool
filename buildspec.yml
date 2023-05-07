@@ -1,0 +1,22 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+        python: 3.11
+  pre_build:
+    commands:
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y6n9o6u7
+  build:
+    commands:
+      - echo "Building Docker image..."
+      - docker build -t one2onetool .
+      - docker tag one2onetool:latest public.ecr.aws/y6n9o6u7/one2onetool:latest
+  post_build:
+    commands:
+      - echo "Pushing Docker image to Amazon ECR..."
+      - docker push public.ecr.aws/y6n9o6u7/one2onetool:latest
+artifacts:
+  files:
+    - '**/*'
+  name: one2onetool-artifact
