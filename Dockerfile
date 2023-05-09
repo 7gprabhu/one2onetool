@@ -4,9 +4,11 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
+COPY . .
+
 RUN npm install
 
-COPY . .
+COPY . /usr/src/app
 
 EXPOSE 80
 
